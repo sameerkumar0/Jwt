@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate
 from .models import CustomUser
 from .serializers import UserRegisterSerializer, UserSerializer
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
+from django.shortcuts import get_object_or_404
 
 # User Registration API
 class RegisterView(APIView):
@@ -38,5 +39,9 @@ class UserProfileView(APIView):
     def get(self, request):
         user = CustomUser.objects.all()
         serializer = UserSerializer(user,many=True)
+        return Response(serializer.data)
+    def get(self ,request,pk):
+        user=get_object_or_404(CustomUser,pk=pk)
+        serializer=UserSerializer(user)
         return Response(serializer.data)
 
